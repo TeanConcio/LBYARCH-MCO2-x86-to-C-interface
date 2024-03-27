@@ -1,18 +1,33 @@
-;assembly part using x86-64
-
+; Declare Memory Data
 section .data
-msg db "Hello World", 13, 10, 0
+	sdot dd 0.0
 
+
+
+; Setup Environment
 section .text
-bits 64
-default rel		; to handle address relocation
+	bits 64
+	default rel		; to handle address relocation
+	global asmDotProduct
 
-global asmhello
-extern printf
 
-asmhello:
-	sub rsp, 8*5	; caller
-	lea rcx, [msg]
-	call printf
-	add rsp, 8*5
+
+; Dot Product Function in x86_64 Assembly
+asmDotProduct:
+
+	L1:
+		DEC RCX
+
+		MOVSS XMM1, [RDX + RCX * 4]
+		MOVSS XMM2, [R8 + RCX * 4]
+		VMULSS XMM3, XMM1, XMM2
+
+		ADDSS XMM4, XMM3
+		MOVSS [sdot], XMM4
+
+		INC RCX
+		LOOP L1
+
+	MOVSS XMM0, [sdot]
+	
 	ret
