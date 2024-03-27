@@ -12,6 +12,7 @@
 
 
 // Constants
+#define TWO_DEBUG 4
 #define TWO_TWENTY 1048576
 #define TWO_TWENTY_FOUR 16777216
 #define TWO_THIRTY 1073741824
@@ -37,7 +38,9 @@ void generateRandomVector(int vectorSize, float* vector) {
 
     for (int i = 0; i < vectorSize; i++) {
         
-        vector[i] = (float)rand() / (float)(RAND_MAX / MAX_FLOAT);
+        vector[i] = (float)rand() / (float)(RAND_MAX / (MAX_FLOAT * 2));
+        //vector[i] = (int)(vector[i] * MAX_FLOAT) / MAX_FLOAT;
+        vector[i] -= MAX_FLOAT;
         
         // Check Progress
         if (i == pow2 - 1) {
@@ -54,14 +57,14 @@ void generateRandomVector(int vectorSize, float* vector) {
 // Display Vector for Debugging
 void printVector(int vectorSize, float* vector) {
 
-    printf("[ ");
+    printf("{ ");
 
     for (int i = 0; i < vectorSize - 1; i++) {
 
         printf("%f, ", vector[i]);
     }
 
-    printf("%f ]\n", vector[vectorSize - 1]);
+    printf("%f }\n", vector[vectorSize - 1]);
 }
 
 
@@ -87,11 +90,39 @@ int main()
     printf("Generating Vector B...\n");
     generateRandomVector(TWO_THIRTY, vectorB);
     printf("Vector B Generated\n\n");
-    //printf("Vector A: ");
-    //printVector(20, vectorA);
-    //printf("Vector B: ");
-    //printVector(20, vectorB);
-    //printf("\n");
+    printf("Vector A: ");
+    printVector(TWO_DEBUG, vectorA);
+    printf("Vector B: ");
+    printVector(TWO_DEBUG, vectorB);
+    printf("\n");
+
+
+    printf("---------- ---------- ---------- ----------\n");
+
+    printf("\nCase 0 (Debug) : Vector Size n = %i\n\n", TWO_DEBUG);
+    n = TWO_DEBUG;
+
+    // Time C Function Call
+    printf("C Dot Product Function Call:\n");
+    startTime = clock();
+    sdot = cDotProduct(n, vectorA, vectorB);
+    startTime = clock() - startTime;
+    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
+    printf("\tsdot Result: %f\n", sdot);
+    printf("\tExecution Time: %lf\n\n", timeTaken);
+
+    // Time C Function Call
+    printf("Assembly Dot Product Function Call:\n");
+    startTime = clock();
+    sdot = asmDotProduct(n, vectorA, vectorB);
+    startTime = clock() - startTime;
+    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
+    printf("\tsdot Result: %f\n", sdot);
+    printf("\tExecution Time: %lf\n\n", timeTaken);
+
+    //free(vectorA);
+    //free(vectorB);
+    //return 0;
 
 
 

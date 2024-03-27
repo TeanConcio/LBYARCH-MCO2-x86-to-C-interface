@@ -15,6 +15,8 @@ section .text
 ; Dot Product Function in x86_64 Assembly
 asmDotProduct:
 
+	MOVSS XMM4, [sdot]
+
 	L1:
 		DEC RCX
 
@@ -23,11 +25,11 @@ asmDotProduct:
 		VMULSS XMM3, XMM1, XMM2
 
 		ADDSS XMM4, XMM3
-		MOVSS [sdot], XMM4
 
 		INC RCX
 		LOOP L1
 
+	MOVSS [sdot], XMM4
 	MOVSS XMM0, [sdot]
 	
 	ret
