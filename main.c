@@ -14,9 +14,9 @@
 
 // Constants
 #define DEBUG_MODE 0
-
 #define TWO_DEBUG 16
-#define MAX_FLOAT 100.0
+#define TRIAL_NO 30
+#define MAX_FLOAT 100.0f
 
 
 
@@ -36,7 +36,7 @@ void generateRandomVector(int vectorSize, float* vector) {
     // Debug
     if (DEBUG_MODE == 1) {
         for (int i = 0; i < TWO_DEBUG; i++)
-            vector[i] = i * 10 + i + i * 0.1 + i * 0.01;
+            vector[i] = i * 10.0f + i + i * 0.1f + i * 0.01f;
         return;
     }
     
@@ -47,9 +47,11 @@ void generateRandomVector(int vectorSize, float* vector) {
     for (int i = 0; i < vectorSize; i++) {
         
         //vector[i] = RAND_MAX * (float)rand() / RAND_MAX;
-        vector[i] = (float)rand() / (float)(RAND_MAX / (MAX_FLOAT * 2));
+        vector[i] = ((float)rand() / (float)(RAND_MAX)) * MAX_FLOAT;
         vector[i] = (int)(vector[i] * MAX_FLOAT) / MAX_FLOAT;
-        vector[i] -= MAX_FLOAT;
+
+        if (rand() % 2 == 0)
+            vector[i] /= -1;
         
         // Check Progress
         if (i == pow2 - 1) {
@@ -70,10 +72,36 @@ void printVector(int vectorSize, float* vector) {
 
     for (int i = 0; i < vectorSize - 1; i++) {
 
-        printf("%f, ", vector[i]);
+        printf("%0.2f, ", vector[i]);
     }
 
-    printf("%f }\n", vector[vectorSize - 1]);
+    printf("%0.2f }\n", vector[vectorSize - 1]);
+}
+
+
+
+double computeAverageTime(double* timesTaken) {
+
+    double average = 0.0;
+
+    for (int i = 0; i < TRIAL_NO; i++)
+        average += timesTaken[i];
+
+    return average / TRIAL_NO;
+}
+
+
+
+// Display Times Taken
+void printTimes(double* timesTaken) {
+
+    printf("{ ");
+
+    for (int i = 0; i < TRIAL_NO - 1; i++)
+        printf("%0.3f, ", timesTaken[i]);
+
+
+    printf("%0.3f }\n", timesTaken[TRIAL_NO - 1]);
 }
 
 
@@ -86,10 +114,15 @@ int main()
     float* vectorA = (float*)malloc((int)pow(2, 28) * sizeof(float));
     float* vectorB = (float*)malloc((int)pow(2, 28) * sizeof(float));
     float sdot = 0;
+    float sdotC = 0;
+    float sdotAsm = 0;
 
     // Time Variables
     clock_t startTime;
-    double timeTaken;
+    double cTimesTaken[TRIAL_NO];
+    double cAvgTimeTaken;
+    double asmTimesTaken[TRIAL_NO];
+    double asmAvgTimeTaken;
 
     // Randomize Vectors
     srand((unsigned int)time(NULL));
@@ -100,40 +133,60 @@ int main()
     generateRandomVector((int)pow(2, 28), vectorB);
     printf("Vector B Generated\n\n");
 
+    printf("Vector A first %i Values: ", TWO_DEBUG);
+    printVector(TWO_DEBUG, vectorA);
+    printf("\n");
+    printf("Vector B first %i Values: ", TWO_DEBUG);
+    printVector(TWO_DEBUG, vectorB);
+
 
 
     if (DEBUG_MODE == 1) {
 
-        printf("Vector A: ");
-        printVector(TWO_DEBUG, vectorA);
-        printf("Vector B: ");
-        printVector(TWO_DEBUG, vectorB);
-        printf("\n");
-
-        printf("---------- ---------- ---------- ----------\n");
+        printf("\n---------- ---------- ---------- ---------- ----------\n");
 
         printf("\nCase 0 (Debug) : Vector Size n = %i\n\n", TWO_DEBUG);
         n = TWO_DEBUG;
 
         // Time C Function Call
-        printf("C Dot Product Function Call:\n");
-        startTime = clock();
-        sdot = cDotProduct(n, vectorA, vectorB);
-        startTime = clock() - startTime;
-        timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-        printf("\tsdot Float Result: %f\n", sdot);
-        printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-        printf("\tExecution Time: %f\n\n", timeTaken);
+        printf("C Dot Product Function Call Trials:\n");
+        for (int i = 0; i < TRIAL_NO; i++) {
+            startTime = clock();
+            sdot = cDotProduct(n, vectorA, vectorB);
+            startTime = clock() - startTime;
+            cTimesTaken[i] = ((double)startTime) / CLOCKS_PER_SEC;
+        }
+        sdotC = sdot;
+        cAvgTimeTaken = computeAverageTime(cTimesTaken);
+        printf("\tsdot Float Result: %f\n", sdotC);
+        printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdotC);
+        printf("\tExecution Times: ");
+        printTimes(cTimesTaken);
+        printf("\tAverage Execution Time: %lf\n\n", cAvgTimeTaken);
 
-        // Time C Function Call
-        printf("Assembly Dot Product Function Call:\n");
-        startTime = clock();
-        sdot = asmDotProduct(n, vectorA, vectorB);
-        startTime = clock() - startTime;
-        timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-        printf("\tsdot Float Result: %f\n", sdot);
-        printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-        printf("\tExecution Time: %f\n\n", timeTaken);
+        // Time x86_64 Function Call
+        printf("x86_64 Dot Product Function Call Trials:\n");
+        for (int i = 0; i < TRIAL_NO; i++) {
+            startTime = clock();
+            sdot = asmDotProduct(n, vectorA, vectorB);
+            startTime = clock() - startTime;
+            asmTimesTaken[i] = ((double)startTime) / CLOCKS_PER_SEC;
+        }
+        sdotAsm = sdot;
+        asmAvgTimeTaken = computeAverageTime(asmTimesTaken);
+        printf("\tsdot Float Result: %f\n", sdotAsm);
+        printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdotAsm);
+        printf("\tExecution Times: ");
+        printTimes(asmTimesTaken);
+        printf("\tAverage Execution Time: %lf\n\n", asmAvgTimeTaken);
+
+        // Results
+        printf("Results:\n");
+        printf("\tSimilarity: %.2f %%\n", sdotC * 100 / sdotAsm);
+        if (asmAvgTimeTaken <= 0)
+            printf("\tTime Difference: 0 (0 %% faster)\n");
+        else
+            printf("\tTime Difference: %lf (%.2lf times faster)\n", cAvgTimeTaken - asmAvgTimeTaken, cAvgTimeTaken / asmAvgTimeTaken);
 
         free(vectorA);
         free(vectorB);
@@ -142,85 +195,145 @@ int main()
 
 
 
-    printf("---------- ---------- ---------- ----------\n");
+    printf("\n---------- ---------- ---------- ---------- ----------\n");
 
     n = (int)pow(2, 20);
     printf("\nCase 1 : Vector Size n = 2^20 = %i\n\n", n);
 
     // Time C Function Call
-    printf("C Dot Product Function Call:\n");
-    startTime = clock();
-    sdot = cDotProduct(n, vectorA, vectorB);
-    startTime = clock() - startTime;
-    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Float Result: %f\n", sdot);
-    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %f\n\n", timeTaken);
+    printf("C Dot Product Function Call Trials:\n");
+    for (int i = 0; i < TRIAL_NO; i++) {
+        startTime = clock();
+        sdot = cDotProduct(n, vectorA, vectorB);
+        startTime = clock() - startTime;
+        cTimesTaken[i] = ((double)startTime) / CLOCKS_PER_SEC;
+    }
+    sdotC = sdot;
+    cAvgTimeTaken = computeAverageTime(cTimesTaken);
+    printf("\tsdot Float Result: %f\n", sdotC);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdotC);
+    printf("\tExecution Times: ");
+    printTimes(cTimesTaken);
+    printf("\tAverage Execution Time: %lf\n\n", cAvgTimeTaken);
 
-    // Time C Function Call
-    printf("Assembly Dot Product Function Call:\n");
-    startTime = clock();
-    sdot = asmDotProduct(n, vectorA, vectorB);
-    startTime = clock() - startTime;
-    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Float Result: %f\n", sdot);
-    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %f\n\n", timeTaken); 
+    // Time x86_64 Function Call
+    printf("x86_64 Dot Product Function Call Trials:\n");
+    for (int i = 0; i < TRIAL_NO; i++) {
+        startTime = clock();
+        sdot = asmDotProduct(n, vectorA, vectorB);
+        startTime = clock() - startTime;
+        asmTimesTaken[i] = ((double)startTime) / CLOCKS_PER_SEC;
+    }
+    sdotAsm = sdot;
+    asmAvgTimeTaken = computeAverageTime(asmTimesTaken);
+    printf("\tsdot Float Result: %f\n", sdotAsm);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdotAsm);
+    printf("\tExecution Times: ");
+    printTimes(asmTimesTaken);
+    printf("\tAverage Execution Time: %lf\n\n", asmAvgTimeTaken);
+
+    // Results
+    printf("Results:\n");
+    printf("\tSimilarity: %.2f %%\n", sdotC * 100 / sdotAsm);
+    if (asmAvgTimeTaken <= 0)
+        printf("\tTime Difference: 0 (0 %% faster)\n");
+    else
+        printf("\tTime Difference: %lf (%.2lf times faster)\n", cAvgTimeTaken - asmAvgTimeTaken, cAvgTimeTaken / asmAvgTimeTaken);
     
 
     
-    printf("---------- ---------- ---------- ----------\n");
+    printf("\n---------- ---------- ---------- ---------- ----------\n");
 
     n = (int)pow(2, 24);
     printf("\nCase 2 : Vector Size n = 2^24 = %i\n\n", n);
 
     // Time C Function Call
-    printf("C Dot Product Function Call:\n");
-    startTime = clock();
-    sdot = cDotProduct(n, vectorA, vectorB);
-    startTime = clock() - startTime;
-    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Float Result: %f\n", sdot);
-    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %f\n\n", timeTaken);
+    printf("C Dot Product Function Call Trials:\n");
+    for (int i = 0; i < TRIAL_NO; i++) {
+        startTime = clock();
+        sdot = cDotProduct(n, vectorA, vectorB);
+        startTime = clock() - startTime;
+        cTimesTaken[i] = ((double)startTime) / CLOCKS_PER_SEC;
+    }
+    sdotC = sdot;
+    cAvgTimeTaken = computeAverageTime(cTimesTaken);
+    printf("\tsdot Float Result: %f\n", sdotC);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdotC);
+    printf("\tExecution Times: ");
+    printTimes(cTimesTaken);
+    printf("\tAverage Execution Time: %lf\n\n", cAvgTimeTaken);
 
-    // Time C Function Call
-    printf("Assembly Dot Product Function Call:\n");
-    startTime = clock();
-    sdot = asmDotProduct(n, vectorA, vectorB);
-    startTime = clock() - startTime;
-    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Float Result: %f\n", sdot);
-    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %f\n\n", timeTaken); 
+    // Time x86_64 Function Call
+    printf("x86_64 Dot Product Function Call Trials:\n");
+    for (int i = 0; i < TRIAL_NO; i++) {
+        startTime = clock();
+        sdot = asmDotProduct(n, vectorA, vectorB);
+        startTime = clock() - startTime;
+        asmTimesTaken[i] = ((double)startTime) / CLOCKS_PER_SEC;
+    }
+    sdotAsm = sdot;
+    asmAvgTimeTaken = computeAverageTime(asmTimesTaken);
+    printf("\tsdot Float Result: %f\n", sdotAsm);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdotAsm);
+    printf("\tExecution Times: ");
+    printTimes(asmTimesTaken);
+    printf("\tAverage Execution Time: %lf\n\n", asmAvgTimeTaken);
+
+    // Results
+    printf("Results:\n");
+    printf("\tSimilarity: %.2f %%\n", sdotC * 100 / sdotAsm);
+    if (asmAvgTimeTaken <= 0)
+        printf("\tTime Difference: 0 (0 %% faster)\n");
+    else
+        printf("\tTime Difference: %lf (%.2lf times faster)\n", cAvgTimeTaken - asmAvgTimeTaken, cAvgTimeTaken / asmAvgTimeTaken);
     
     
 
-    printf("---------- ---------- ---------- ----------\n");
+    printf("\n---------- ---------- ---------- ---------- ----------\n");
 
     n = (int)pow(2, 28);
     printf("\nCase 3 : Vector Size n = 2^28 = %i\n\n", n);
     
 
     // Time C Function Call
-    printf("C Dot Product Function Call:\n");
-    startTime = clock();
-    sdot = cDotProduct(n, vectorA, vectorB);
-    startTime = clock() - startTime;
-    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Float Result: %f\n", sdot);
-    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %f\n\n", timeTaken);
+    printf("C Dot Product Function Call Trials:\n");
+    for (int i = 0; i < TRIAL_NO; i++) {
+        startTime = clock();
+        sdot = cDotProduct(n, vectorA, vectorB);
+        startTime = clock() - startTime;
+        cTimesTaken[i] = ((double)startTime) / CLOCKS_PER_SEC;
+    }
+    sdotC = sdot;
+    cAvgTimeTaken = computeAverageTime(cTimesTaken);
+    printf("\tsdot Float Result: %f\n", sdotC);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdotC);
+    printf("\tExecution Times: ");
+    printTimes(cTimesTaken);
+    printf("\tAverage Execution Time: %lf\n\n", cAvgTimeTaken);
 
-    // Time C Function Call
-    printf("Assembly Dot Product Function Call:\n");
-    startTime = clock();
-    sdot = asmDotProduct(n, vectorA, vectorB);
-    startTime = clock() - startTime;
-    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Float Result: %f\n", sdot);
-    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %f\n\n", timeTaken);
+    // Time x86_64 Function Call
+    printf("x86_64 Dot Product Function Call Trials:\n");
+    for (int i = 0; i < TRIAL_NO; i++) {
+        startTime = clock();
+        sdot = asmDotProduct(n, vectorA, vectorB);
+        startTime = clock() - startTime;
+        asmTimesTaken[i] = ((double)startTime) / CLOCKS_PER_SEC;
+    }
+    sdotAsm = sdot;
+    asmAvgTimeTaken = computeAverageTime(asmTimesTaken);
+    printf("\tsdot Float Result: %f\n", sdotAsm);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdotAsm);
+    printf("\tExecution Times: ");
+    printTimes(asmTimesTaken);
+    printf("\tAverage Execution Time: %lf\n\n", asmAvgTimeTaken);
+
+    // Results
+    printf("Results:\n");
+    printf("\tSimilarity: %.2f %%\n", sdotC * 100 / sdotAsm);
+    if (asmAvgTimeTaken <= 0)
+        printf("\tTime Difference: 0 (0 %% faster)\n");
+    else
+        printf("\tTime Difference: %lf (%.2lf times faster)\n", cAvgTimeTaken - asmAvgTimeTaken, cAvgTimeTaken / asmAvgTimeTaken);
 
 
 
