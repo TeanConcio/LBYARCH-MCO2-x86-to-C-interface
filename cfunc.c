@@ -11,14 +11,14 @@ float cDotProduct(int vectorSize, float* vectorA, float* vectorB) {
     for (int i = 0; i < vectorSize; i++) {
         
         //printf("(%f * %f) + ", vectorA[i], vectorB[i]);
-        printf("%f + ", vectorA[i] * vectorB[i]);
+        //printf("%f + ", vectorA[i] * vectorB[i]);
 
         sdot += vectorA[i] * vectorB[i];
     }
 
-    printf(" = %f", sdot);
+    //printf(" = %f", sdot);
 
-    printf("\n");
+    //printf("\n");
 
     return sdot;
 }

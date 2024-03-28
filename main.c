@@ -16,7 +16,7 @@
 #define TWO_TWENTY 1048576
 #define TWO_TWENTY_FOUR 16777216
 #define TWO_THIRTY 1073741824
-#define MAX_FLOAT 100.0
+#define MAX_FLOAT 100.0f
 
 
 
@@ -33,11 +33,12 @@ extern float asmDotProduct(int vectorSize, float* vectorA, float* vectorB);
 // Generate Random Values into Vector
 void generateRandomVector(int vectorSize, float* vector) {
 
-    vector[0] = 1.11f;
-    vector[1] = 2.22f;
-    vector[2] = 3.33f;
-    vector[3] = 4.44f;
-    return;
+    // Debug
+    //vector[0] = 1.11f;
+    //vector[1] = 2.22f;
+    //vector[2] = 3.33f;
+    //vector[3] = 4.44f;
+    //return;
 
     int pow = 0;
     int pow2 = 1;
@@ -45,7 +46,7 @@ void generateRandomVector(int vectorSize, float* vector) {
     for (int i = 0; i < vectorSize; i++) {
         
         vector[i] = (float)rand() / (float)(RAND_MAX / (MAX_FLOAT * 2));
-        //vector[i] = (int)(vector[i] * MAX_FLOAT) / MAX_FLOAT;
+        vector[i] = (int)(vector[i] * MAX_FLOAT) / MAX_FLOAT;
         vector[i] -= MAX_FLOAT;
         
         // Check Progress
@@ -114,7 +115,8 @@ int main()
     sdot = cDotProduct(n, vectorA, vectorB);
     startTime = clock() - startTime;
     timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Result: %f\n", sdot);
+    printf("\tsdot Float Result: %f\n", sdot); 
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
     printf("\tExecution Time: %lf\n\n", timeTaken);
 
     // Time C Function Call
@@ -123,12 +125,13 @@ int main()
     sdot = asmDotProduct(n, vectorA, vectorB);
     startTime = clock() - startTime;
     timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Result: %f\n", sdot);
+    printf("\tsdot Float Result: %f\n", sdot);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
     printf("\tExecution Time: %lf\n\n", timeTaken);
 
-    free(vectorA);
-    free(vectorB);
-    return 0;
+    //free(vectorA);
+    //free(vectorB);
+    //return 0;
 
 
 
@@ -143,7 +146,8 @@ int main()
     sdot = cDotProduct(n, vectorA, vectorB);
     startTime = clock() - startTime;
     timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Result: %f\n", sdot);
+    printf("\tsdot Float Result: %f\n", sdot);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
     printf("\tExecution Time: %lf\n\n", timeTaken);
 
     // Time C Function Call
@@ -152,7 +156,8 @@ int main()
     sdot = asmDotProduct(n, vectorA, vectorB);
     startTime = clock() - startTime;
     timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Result: %f\n", sdot);
+    printf("\tsdot Float Result: %f\n", sdot);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
     printf("\tExecution Time: %lf\n\n", timeTaken); 
     
 
@@ -168,7 +173,8 @@ int main()
     sdot = cDotProduct(n, vectorA, vectorB);
     startTime = clock() - startTime;
     timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Result: %f\n", sdot);
+    printf("\tsdot Float Result: %f\n", sdot);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
     printf("\tExecution Time: %lf\n\n", timeTaken);
 
     // Time C Function Call
@@ -177,7 +183,8 @@ int main()
     sdot = asmDotProduct(n, vectorA, vectorB);
     startTime = clock() - startTime;
     timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Result: %f\n", sdot);
+    printf("\tsdot Float Result: %f\n", sdot);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
     printf("\tExecution Time: %lf\n\n", timeTaken); 
     
     
@@ -193,7 +200,8 @@ int main()
     sdot = cDotProduct(n, vectorA, vectorB);
     startTime = clock() - startTime;
     timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Result: %f\n", sdot);
+    printf("\tsdot Float Result: %f\n", sdot);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
     printf("\tExecution Time: %lf\n\n", timeTaken);
 
     // Time C Function Call
@@ -202,7 +210,8 @@ int main()
     sdot = asmDotProduct(n, vectorA, vectorB);
     startTime = clock() - startTime;
     timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Result: %f\n", sdot);
+    printf("\tsdot Float Result: %f\n", sdot);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
     printf("\tExecution Time: %lf\n\n", timeTaken);
 
 
