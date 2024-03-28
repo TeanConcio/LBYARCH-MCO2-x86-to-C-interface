@@ -149,6 +149,7 @@
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="nasm.exe" />
+    <None Include="Quiz_-x86-to-C-interface-programming-project - Nicole.pdf" />
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
