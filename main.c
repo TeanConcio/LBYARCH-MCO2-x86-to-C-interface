@@ -33,6 +33,12 @@ extern float asmDotProduct(int vectorSize, float* vectorA, float* vectorB);
 // Generate Random Values into Vector
 void generateRandomVector(int vectorSize, float* vector) {
 
+    vector[0] = 1.11f;
+    vector[1] = 2.22f;
+    vector[2] = 3.33f;
+    vector[3] = 4.44f;
+    return;
+
     int pow = 0;
     int pow2 = 1;
 
@@ -120,9 +126,9 @@ int main()
     printf("\tsdot Result: %f\n", sdot);
     printf("\tExecution Time: %lf\n\n", timeTaken);
 
-    //free(vectorA);
-    //free(vectorB);
-    //return 0;
+    free(vectorA);
+    free(vectorB);
+    return 0;
 
 
 
