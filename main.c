@@ -8,15 +8,15 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <time.h>
+#include <math.h>
 
 
 
 // Constants
-#define TWO_DEBUG 4
-#define TWO_TWENTY 1048576
-#define TWO_TWENTY_FOUR 16777216
-#define TWO_THIRTY 1073741824
-#define MAX_FLOAT 100.0f
+#define DEBUG_MODE 0
+
+#define TWO_DEBUG 16
+#define MAX_FLOAT 100.0
 
 
 
@@ -34,26 +34,28 @@ extern float asmDotProduct(int vectorSize, float* vectorA, float* vectorB);
 void generateRandomVector(int vectorSize, float* vector) {
 
     // Debug
-    //vector[0] = 1.11f;
-    //vector[1] = 2.22f;
-    //vector[2] = 3.33f;
-    //vector[3] = 4.44f;
-    //return;
+    if (DEBUG_MODE == 1) {
+        for (int i = 0; i < TWO_DEBUG; i++)
+            vector[i] = i * 10 + i + i * 0.1 + i * 0.01;
+        return;
+    }
+    
 
-    int pow = 0;
+    int powCounter = 0;
     int pow2 = 1;
 
     for (int i = 0; i < vectorSize; i++) {
         
+        //vector[i] = RAND_MAX * (float)rand() / RAND_MAX;
         vector[i] = (float)rand() / (float)(RAND_MAX / (MAX_FLOAT * 2));
         vector[i] = (int)(vector[i] * MAX_FLOAT) / MAX_FLOAT;
         vector[i] -= MAX_FLOAT;
         
         // Check Progress
         if (i == pow2 - 1) {
-            printf("%i (%i), ", pow2, pow);
+            printf("%i (%i), ", pow2, powCounter);
 
-            pow++;
+            powCounter++;
             pow2 *= 2;
         }
     }
@@ -81,8 +83,8 @@ int main()
 {
     // Initialize Variables
     int n = 0;
-    float* vectorA = (float*)malloc(TWO_THIRTY * sizeof(float));
-    float* vectorB = (float*)malloc(TWO_THIRTY * sizeof(float));
+    float* vectorA = (float*)malloc((int)pow(2, 28) * sizeof(float));
+    float* vectorB = (float*)malloc((int)pow(2, 28) * sizeof(float));
     float sdot = 0;
 
     // Time Variables
@@ -92,80 +94,58 @@ int main()
     // Randomize Vectors
     srand((unsigned int)time(NULL));
     printf("Generating Vector A...\n");
-    generateRandomVector(TWO_THIRTY, vectorA);
+    generateRandomVector((int)pow(2, 28), vectorA);
     printf("Vector A Generated\n\n");
     printf("Generating Vector B...\n");
-    generateRandomVector(TWO_THIRTY, vectorB);
+    generateRandomVector((int)pow(2, 28), vectorB);
     printf("Vector B Generated\n\n");
-    printf("Vector A: ");
-    printVector(TWO_DEBUG, vectorA);
-    printf("Vector B: ");
-    printVector(TWO_DEBUG, vectorB);
-    printf("\n");
+
+
+
+    if (DEBUG_MODE == 1) {
+
+        printf("Vector A: ");
+        printVector(TWO_DEBUG, vectorA);
+        printf("Vector B: ");
+        printVector(TWO_DEBUG, vectorB);
+        printf("\n");
+
+        printf("---------- ---------- ---------- ----------\n");
+
+        printf("\nCase 0 (Debug) : Vector Size n = %i\n\n", TWO_DEBUG);
+        n = TWO_DEBUG;
+
+        // Time C Function Call
+        printf("C Dot Product Function Call:\n");
+        startTime = clock();
+        sdot = cDotProduct(n, vectorA, vectorB);
+        startTime = clock() - startTime;
+        timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
+        printf("\tsdot Float Result: %f\n", sdot);
+        printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
+        printf("\tExecution Time: %f\n\n", timeTaken);
+
+        // Time C Function Call
+        printf("Assembly Dot Product Function Call:\n");
+        startTime = clock();
+        sdot = asmDotProduct(n, vectorA, vectorB);
+        startTime = clock() - startTime;
+        timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
+        printf("\tsdot Float Result: %f\n", sdot);
+        printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
+        printf("\tExecution Time: %f\n\n", timeTaken);
+
+        free(vectorA);
+        free(vectorB);
+        return 0;
+    }
+
 
 
     printf("---------- ---------- ---------- ----------\n");
 
-    printf("\nCase 0 (Debug) : Vector Size n = %i\n\n", TWO_DEBUG);
-    n = TWO_DEBUG;
-
-    // Time C Function Call
-    printf("C Dot Product Function Call:\n");
-    startTime = clock();
-    sdot = cDotProduct(n, vectorA, vectorB);
-    startTime = clock() - startTime;
-    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Float Result: %f\n", sdot); 
-    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %lf\n\n", timeTaken);
-
-    // Time C Function Call
-    printf("Assembly Dot Product Function Call:\n");
-    startTime = clock();
-    sdot = asmDotProduct(n, vectorA, vectorB);
-    startTime = clock() - startTime;
-    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Float Result: %f\n", sdot);
-    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %lf\n\n", timeTaken);
-
-    //free(vectorA);
-    //free(vectorB);
-    //return 0;
-
-
-
-    printf("---------- ---------- ---------- ----------\n");
-
-    printf("\nCase 1 : Vector Size n = 2^20\n\n");
-    n = TWO_TWENTY;
-
-    // Time C Function Call
-    printf("C Dot Product Function Call:\n");
-    startTime = clock();
-    sdot = cDotProduct(n, vectorA, vectorB);
-    startTime = clock() - startTime;
-    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Float Result: %f\n", sdot);
-    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %lf\n\n", timeTaken);
-
-    // Time C Function Call
-    printf("Assembly Dot Product Function Call:\n");
-    startTime = clock();
-    sdot = asmDotProduct(n, vectorA, vectorB);
-    startTime = clock() - startTime;
-    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
-    printf("\tsdot Float Result: %f\n", sdot);
-    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %lf\n\n", timeTaken); 
-    
-
-    
-    printf("---------- ---------- ---------- ----------\n");
-
-    printf("\nCase 2 : Vector Size n = 2^24\n\n");
-    n = TWO_TWENTY_FOUR;
+    n = (int)pow(2, 20);
+    printf("\nCase 1 : Vector Size n = 2^20 = %i\n\n", n);
 
     // Time C Function Call
     printf("C Dot Product Function Call:\n");
@@ -175,7 +155,7 @@ int main()
     timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
     printf("\tsdot Float Result: %f\n", sdot);
     printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %lf\n\n", timeTaken);
+    printf("\tExecution Time: %f\n\n", timeTaken);
 
     // Time C Function Call
     printf("Assembly Dot Product Function Call:\n");
@@ -185,14 +165,14 @@ int main()
     timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
     printf("\tsdot Float Result: %f\n", sdot);
     printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %lf\n\n", timeTaken); 
-    
+    printf("\tExecution Time: %f\n\n", timeTaken); 
     
 
+    
     printf("---------- ---------- ---------- ----------\n");
 
-    printf("\nCase 3 : Vector Size n = 2^30\n\n");
-    n = TWO_THIRTY;
+    n = (int)pow(2, 24);
+    printf("\nCase 2 : Vector Size n = 2^24 = %i\n\n", n);
 
     // Time C Function Call
     printf("C Dot Product Function Call:\n");
@@ -202,7 +182,7 @@ int main()
     timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
     printf("\tsdot Float Result: %f\n", sdot);
     printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %lf\n\n", timeTaken);
+    printf("\tExecution Time: %f\n\n", timeTaken);
 
     // Time C Function Call
     printf("Assembly Dot Product Function Call:\n");
@@ -212,7 +192,35 @@ int main()
     timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
     printf("\tsdot Float Result: %f\n", sdot);
     printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
-    printf("\tExecution Time: %lf\n\n", timeTaken);
+    printf("\tExecution Time: %f\n\n", timeTaken); 
+    
+    
+
+    printf("---------- ---------- ---------- ----------\n");
+
+    n = (int)pow(2, 28);
+    printf("\nCase 3 : Vector Size n = 2^28 = %i\n\n", n);
+    
+
+    // Time C Function Call
+    printf("C Dot Product Function Call:\n");
+    startTime = clock();
+    sdot = cDotProduct(n, vectorA, vectorB);
+    startTime = clock() - startTime;
+    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
+    printf("\tsdot Float Result: %f\n", sdot);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
+    printf("\tExecution Time: %f\n\n", timeTaken);
+
+    // Time C Function Call
+    printf("Assembly Dot Product Function Call:\n");
+    startTime = clock();
+    sdot = asmDotProduct(n, vectorA, vectorB);
+    startTime = clock() - startTime;
+    timeTaken = ((double)startTime) / CLOCKS_PER_SEC;
+    printf("\tsdot Float Result: %f\n", sdot);
+    printf("\tsdot Hex Result: %x\n", *(unsigned int*)&sdot);
+    printf("\tExecution Time: %f\n\n", timeTaken);
 
 
 

@@ -1,2 +1,4 @@
 ﻿  main.c
+C:\Users\Tean Concio\Documents\Test Applications\x64 Assembly\LBYARCH-MCO2-x86-to-C-interface\main.c(39,46): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Tean Concio\Documents\Test Applications\x64 Assembly\LBYARCH-MCO2-x86-to-C-interface\main.c(51,50): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   LBYARCH-MCO2-x86-to-C-interface.vcxproj -> C:\Users\Tean Concio\Documents\Test Applications\x64 Assembly\LBYARCH-MCO2-x86-to-C-interface\x64\Debug\LBYARCH-MCO2-x86-to-C-interface.exe
