@@ -48,6 +48,8 @@ Vector B first 16 Values: { -76.86, 92.12, 12.03, 33.73, 0.73, 53.71, 26.03, -47
         **Similarity:** 100.00 %  
         **Time Difference:** 0.072467 (32.06 times faster)  
 
+---
+
 **Case 2 : Vector Size n = 2^24 = 16777216**
 
 **C Dot Product Function Call Trials:**
@@ -62,6 +64,7 @@ Vector B first 16 Values: { -76.86, 92.12, 12.03, 33.73, 0.73, 53.71, 26.03, -47
         **Similarity:** 100.00 %  
         **Time Difference:** 0.218267 (6.80 times faster)
 
+---
 
 **Case 3 : Vector Size n = 2^28 = 268435456**
 
