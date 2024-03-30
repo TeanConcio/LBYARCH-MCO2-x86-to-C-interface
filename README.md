@@ -80,6 +80,8 @@ Vector B first 16 Values: { -76.86, 92.12, 12.03, 33.73, 0.73, 53.71, 26.03, -47
         **Similarity:** 100.00 %  
         **Time Difference:** 1.576500 (3.67 times faster)
 
+---
+
 As can be seen across all cases, x86-64 Assembly is shown to have faster execution time compared to C when solving for Dot Product. In cases of 2^20, 2^24, 2^28 vector size, x86-64 Assembly was tested to have 32.06 times, 6.80 times, and 3.67 times faster performance compared to C, respectively.
 
 ---
