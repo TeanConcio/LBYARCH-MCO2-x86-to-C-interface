@@ -14,7 +14,7 @@ Scalar variable n (integer) contains the length of the vector; Vectors A and B a
 ### Output
  Store the result in memory locaon sdot. Display the result for all versions of the kernel (i.e., C and x86-64).
 
- ## The Program Output
+## The Program Output
 Generating Vector A...
 1 (0), 2 (1), 4 (2), 8 (3), 16 (4), 32 (5), 64 (6), 128 (7), 256 (8), 512 (9), 1024 (10), 2048 (11), 4096 (12), 8192 (13), 16384 (14), 32768 (15), 65536 (16), 131072 (17), 262144 (18), 524288 (19), 1048576 (20), 2097152 (21), 4194304 (22), 8388608 (23), 16777216 (24), 33554432 (25), 67108864 (26), 134217728 (27), 268435456 (28), Vector A Generated
 
@@ -25,7 +25,7 @@ Vector A first 16 Values: { -51.86, 67.11, 87.03, 8.73, 75.74, 28.71, 1.03, -22.
 
 Vector B first 16 Values: { -76.86, 92.12, 12.03, 33.73, 0.73, 53.71, 26.03, -47.70, -81.99, -62.01, -82.98, -2.29, -66.13, 80.57, 40.09, 78.90 }
 
-## Comparative Execution Time
+### Comparative Execution Time
 ### Case 1 : Vector Size n = 2^20 = 1048576
 
 **C Dot Product Function Call Trials:**  
@@ -74,17 +74,16 @@ Vector B first 16 Values: { -76.86, 92.12, 12.03, 33.73, 0.73, 53.71, 26.03, -47
         **Similarity:** 100.00 %  
         **Time Difference:** 1.576500 (3.67 times faster)
 
-##
 As can be seen across all cases, x86-64 Assembly is shown to have faster execution time compared to C when solving for Dot Product. In cases of 2^20, 2^24, 2^28 vector size, x86-64 Assembly was tested to have 32.06 times, 6.80 times, and 3.67 times faster performance compared to C, respectively.
 
- ## Analysis
+ ### Analysis
 From a theoretical point of view, Assembly can be said to be one of the the fastest programming languages, assuming most optimized implementations for all languages. Being a low level language, Assembly is much more similar to machine language than a high level language like C. This gives the programmer more control, as high level languages still need to be compiled and assembled into machine language, which takes time and can introduce inefficiencies and more overhead.
 
 To test this, the project implemented a dot product calculator in C and x86-64 Assembly. As discussed in the Comparative Execution Time portion, x86-64 Assembly was shown to have consistently faster performance compared to C.
 
 With x86-64 Assembly consistently outperforming C, it can be recommended that x86-64 Assembly be used in cases where computations of large numbers are involved in order to save time. However, it should still be noted that the speed of x86-64 Assembly still depends on the skill of the programmer.
 
-## Output with Correctness Check
+### Output with Correctness Check
 
 ![alt text](LBYARCH-MCO2-x86-to-C-interface-OUTPUT.png)
 
