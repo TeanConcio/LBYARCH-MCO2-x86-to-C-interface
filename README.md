@@ -4,6 +4,20 @@ This project serves as partial fulfillment of the LBYARCH Course
 Tean Concio XX22  
 Nicole Ong S11
 
+- [LBYARCH-MCO2-x86-to-C-interface](#lbyarch-mco2-x86-to-c-interface)
+  - [Specifications](#specifications)
+    - [Input:](#input)
+    - [Output](#output)
+  - [The Program Output](#the-program-output)
+  - [Comparative Execution Time](#comparative-execution-time)
+    - [Case 1 : Vector Size n = 2^20 = 1048576](#case-1--vector-size-n--220--1048576)
+    - [Case 2 : Vector Size n = 2^24 = 16777216](#case-2--vector-size-n--224--16777216)
+    - [Case 3 : Vector Size n = 2^28 = 268435456](#case-3--vector-size-n--228--268435456)
+  - [](#)
+  - [Analysis](#analysis)
+  - [Output with Correctness Check](#output-with-correctness-check)
+
+
 ## Specifications
 The project comprises two kernels in C and x86-64 Assembly which computes for dot products between two vectors A and B.
 
