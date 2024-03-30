@@ -27,6 +27,8 @@ Vector A first 16 Values: { 73.18, -12.43, 10.87, -81.98, 94.31, 16.90, -62.28, 
 
 Vector B first 16 Values: { 98.18, -37.43, 35.88, -6.97, 19.31, 41.90, -87.28, -15.66, 19.89, -18.96, 59.95, -76.83, -92.26, -87.87, -21.66, 51.22 }
 
+---
+
 ### 1b. Setup: Release Mode
 Generating Vector A...
 1 (0), 2 (1), 4 (2), 8 (3), 16 (4), 32 (5), 64 (6), 128 (7), 256 (8), 512 (9), 1024 (10), 2048 (11), 4096 (12), 8192 (13), 16384 (14), 32768 (15), 65536 (16), 131072 (17), 262144 (18), 524288 (19), 1048576 (20), 2097152 (21), 4194304 (22), 8388608 (23), 16777216 (24), 33554432 (25), 67108864 (26), 134217728 (27), 268435456 (28), Vector A Generated
@@ -89,7 +91,6 @@ Vector B first 16 Values: { -0.75, 2.85, -57.09, 57.58, -19.77, 25.44, -18.40, 8
         **Similarity:** 100.00 %  
         **Time Difference:** 0.155000 (x86_64 is 1.26 times faster)
 
----
 
 | Case              |     C    |  x86-64  | Similarity |
 | :---------------- |  :------ |  :------ | :--------- |
@@ -147,7 +148,6 @@ Vector B first 16 Values: { -0.75, 2.85, -57.09, 57.58, -19.77, 25.44, -18.40, 8
         **Similarity:** 100.00 %  
         **Time Difference:** -0.188300 (C is 1.56 times faster)
 
----
 
 | Case              |     C    |  x86-64  | Similarity |
 | :---------------- |  :------ |  :------ | :--------- |
@@ -165,7 +165,7 @@ Vector B first 16 Values: { -0.75, 2.85, -57.09, 57.58, -19.77, 25.44, -18.40, 8
 | 2^24 = 16777216   |    0.009733    |      x86-64     |   1.27x   | 
 | 2^28 = 268435456  |    0.155000    |      x86-64     |   1.26x   | 
 
----
+
 From a theoretical point of view, Assembly can be said to be one of the the fastest programming languages. Being a low level language, Assembly is much more similar to machine language than a high level language like C. This gives the programmer more control, as high level languages can takes time more time to compile and can introduce inefficiencies and more overhead.
 
 To test this, the project implemented a dot product calculator in C and x86-64 Assembly and run in Debug Configuration. As can be seen in the table, x86-64 Assembly was shown to have consistently faster performance compared to C. However, this performance can be attributed to Debug Configuration compiling the program with no optimization in order to keep debugging simple.
@@ -179,7 +179,6 @@ To test this, the project implemented a dot product calculator in C and x86-64 A
 | 2^24 = 16777216   |    -0.011800   |        C        |   1.56x   | 
 | 2^28 = 268435456  |    -0.188300   |        C        |   1.56x   |  
 
----
 
 When run in Release Configuration, C is shown to be faster than x86-64 Assembly. In Release Configuration, C code is fully optimized. As such, the speed of the C code increases and outdoes x86-64 Assembly in terms of speed.
 
@@ -189,7 +188,12 @@ When run in Release Configuration, C is shown to be faster than x86-64 Assembly.
 
 In theory, x86-64 Assembly can be considered one of the fastest programming languages due to its low level nature. This makes it ideal for performing tasks such as computation if speed is needed. However, the effectivity of Assembly still depends on the skill of the programmer. As seen in the Release Configuration, a well optimized C code can outperform an Assembly. Therefore, it is still up to the programmer to decide which language is ideal for their situation. 
 
+---
+
 ### Output with Correctness Check
 
-![alt text](LBYARCH-MCO2-x86-to-C-interface-OUTPUT.png)
+#### Debug
+![alt text](OUTPUT-DEBUG.png)
+#### Release
+![alt text](OUTPUT-RELEASE.png)
 
