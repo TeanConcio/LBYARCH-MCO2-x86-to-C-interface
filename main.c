@@ -20,8 +20,28 @@
 
 
 
-// Import C Dot Product Function
-#include "cfunc.c"
+// C Dot Product Function
+float cDotProduct(int vectorSize, float* vectorA, float* vectorB) {
+
+    float sdot = 0.0f;
+
+    // For vectorSize, total the product of elements in Vector A and B
+    for (int i = 0; i < vectorSize; i++) {
+
+        if (DEBUG_MODE == 1) {
+            printf("(%lf * %lf) = ", vectorA[i], vectorB[i]);
+            printf("%lf + ", vectorA[i] * vectorB[i]);
+        }
+
+        sdot += vectorA[i] * vectorB[i];
+    }
+
+    if (DEBUG_MODE == 1) {
+        printf("\n");
+    }
+
+    return sdot;
+}
 
 
 
@@ -185,8 +205,14 @@ int main()
         printf("\tSimilarity: %.2f %%\n", sdotC * 100 / sdotAsm);
         if (asmAvgTimeTaken <= 0)
             printf("\tTime Difference: 0 (0 %% faster)\n");
-        else
-            printf("\tTime Difference: %lf (%.2lf times faster)\n", cAvgTimeTaken - asmAvgTimeTaken, cAvgTimeTaken / asmAvgTimeTaken);
+        else {
+            printf("\tTime Difference: %lf ", cAvgTimeTaken - asmAvgTimeTaken);
+
+            if (cAvgTimeTaken > asmAvgTimeTaken)
+                printf("(x86_64 is %.2lf times faster)\n", cAvgTimeTaken / asmAvgTimeTaken);
+            else
+                printf("(C is %.2lf times faster)\n", asmAvgTimeTaken / cAvgTimeTaken);
+        }
 
         free(vectorA);
         free(vectorB);
@@ -237,8 +263,14 @@ int main()
     printf("\tSimilarity: %.2f %%\n", sdotC * 100 / sdotAsm);
     if (asmAvgTimeTaken <= 0)
         printf("\tTime Difference: 0 (0 %% faster)\n");
-    else
-        printf("\tTime Difference: %lf (%.2lf times faster)\n", cAvgTimeTaken - asmAvgTimeTaken, cAvgTimeTaken / asmAvgTimeTaken);
+    else {
+        printf("\tTime Difference: %lf ", cAvgTimeTaken - asmAvgTimeTaken);
+
+        if (cAvgTimeTaken > asmAvgTimeTaken)
+            printf("(x86_64 is %.2lf times faster)\n", cAvgTimeTaken / asmAvgTimeTaken);
+        else
+            printf("(C is %.2lf times faster)\n", asmAvgTimeTaken / cAvgTimeTaken);
+    }
     
 
     
@@ -284,8 +316,14 @@ int main()
     printf("\tSimilarity: %.2f %%\n", sdotC * 100 / sdotAsm);
     if (asmAvgTimeTaken <= 0)
         printf("\tTime Difference: 0 (0 %% faster)\n");
-    else
-        printf("\tTime Difference: %lf (%.2lf times faster)\n", cAvgTimeTaken - asmAvgTimeTaken, cAvgTimeTaken / asmAvgTimeTaken);
+    else {
+        printf("\tTime Difference: %lf ", cAvgTimeTaken - asmAvgTimeTaken);
+
+        if (cAvgTimeTaken > asmAvgTimeTaken)
+            printf("(x86_64 is %.2lf times faster)\n", cAvgTimeTaken / asmAvgTimeTaken);
+        else
+            printf("(C is %.2lf times faster)\n", asmAvgTimeTaken / cAvgTimeTaken);
+    }
     
     
 
@@ -332,8 +370,14 @@ int main()
     printf("\tSimilarity: %.2f %%\n", sdotC * 100 / sdotAsm);
     if (asmAvgTimeTaken <= 0)
         printf("\tTime Difference: 0 (0 %% faster)\n");
-    else
-        printf("\tTime Difference: %lf (%.2lf times faster)\n", cAvgTimeTaken - asmAvgTimeTaken, cAvgTimeTaken / asmAvgTimeTaken);
+    else {
+        printf("\tTime Difference: %lf ", cAvgTimeTaken - asmAvgTimeTaken);
+
+        if (cAvgTimeTaken > asmAvgTimeTaken)
+            printf("(x86_64 is %.2lf times faster)\n", cAvgTimeTaken / asmAvgTimeTaken);
+        else
+            printf("(C is %.2lf times faster)\n", asmAvgTimeTaken / cAvgTimeTaken);
+    }
 
 
 
