@@ -3,11 +3,6 @@ This project serves as partial fulfillment of the LBYARCH Course
 
 Tean Concio XX22  
 Nicole Ong S11
-  - [Specifications](#specifications)
-  - [The Program Output](#the-program-output)
-  - [Comparative Execution Time](#comparative-execution-time)
-  - [Analysis](#analysis)
-  - [Output with Correctness Check](#output-with-correctness-check)
 
 
 ## Specifications
