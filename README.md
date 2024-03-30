@@ -4,15 +4,6 @@ This project serves as partial fulfillment of the LBYARCH Course
 Tean Concio XX22  
 Nicole Ong S11  
 
-- [LBYARCH-MCO2-x86-to-C-interface](#lbyarch-mco2-x86-to-c-interface)
-  - [Specifications](#specifications)
-  - [The Program Output](#the-program-output)
-    - [Setup](#setup)
-    - [Comparative Execution Time](#comparative-execution-time)
-    - [Analysis](#analysis)
-    - [Output with Correctness Check](#output-with-correctness-check)
-
-
 ## Specifications
 The project comprises two kernels in C and x86-64 Assembly which computes for dot products between two vectors A and B.
 
