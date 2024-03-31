@@ -5,7 +5,7 @@ Tean Concio XX22
 Nicole Ong S11  
 
 ## A. Specifications
-The project comprises two kernels in C and x86-64 Assembly which computes for dot products between two vectors A and B.
+The project comprises two kernels in C and x86-64 Assembly which computes for dot products between two vectors A and B. Both C and x86-64 Assembly kernels are timed then compared to each other in Debug Configuration and Release Configuration of Visual Studio.
 
 **Input:**  
 Scalar variable n (integer) contains the length of the vector; Vectors A and B are both single-precision float. Scalar sdot is a single-precision float.
@@ -186,7 +186,7 @@ When run in Release Configuration, C is shown to be faster than x86-64 Assembly.
 
 ### 4. Conclusion
 
-In theory, x86-64 Assembly can be considered one of the fastest programming languages due to its low level nature. This makes it ideal for performing tasks such as computation if speed is needed. However, the effectivity of Assembly still depends on the skill of the programmer. As seen in the Release Configuration, a well optimized C code can outperform an Assembly. Therefore, it is still up to the programmer to decide which language is ideal for their situation. 
+In theory, x86-64 Assembly can be considered one of the fastest programming languages due to its low level nature. This makes it ideal for performing tasks such as computation if speed is needed. However, the effectivity of Assembly still depends on the skill of the programmer. As seen in the Release Configuration, a well optimized C code can outperform an Assembly code performing the same task. Therefore, it is still up to the programmer to decide which language is ideal for their situation. 
 
 ---
 
