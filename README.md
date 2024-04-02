@@ -168,7 +168,7 @@ Vector B first 16 Values: { -0.75, 2.85, -57.09, 57.58, -19.77, 25.44, -18.40, 8
 
 From a theoretical point of view, Assembly can be said to be one of the the fastest programming languages. Being a low level language, Assembly is much more similar to machine language than a high level language like C. This gives the programmer more control, as high level languages can takes time more time to compile and can introduce inefficiencies and more overhead.
 
-To test this, the project implemented a dot product calculator in C and x86-64 Assembly and run in Debug Configuration. As can be seen in the table, x86-64 Assembly was shown to have consistently faster performance compared to C. However, this performance can be attributed to Debug Configuration compiling the program with no optimization in order to keep debugging simple.
+To test this, the project implemented a dot product calculator in C and x86-64 Assembly and run in Debug Configuration. As can be seen in the table, x86-64 Assembly was shown to have consistently faster performance compared to C. However, this performance can be attributed to Debug Configuration compiling the program with no optimization in order to keep debugging simple. Furthermore, Debug Configuration, as the name suggests, also generates debug information, which could also be a factor affecting the speed of the program.
 
 ---
 
